@@ -2,8 +2,11 @@
 <html>
 
 <head>
+    <meta charset="utf-8" />
+    <title>St Lucia Folk Tales</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/@turf/turf"></script>
-    <link href="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css" rel="stylesheet" />
     <style>
         body {
             margin: 0;
@@ -13,6 +16,22 @@
         #map {
             width: 100%;
             height: 100vh;
+        }
+
+        .frog-marker {
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .frog-marker:active {
+            cursor: grabbing;
+        }
+
+        .frog-marker svg {
+            width: 100%;
+            height: 100%;
         }
 
         .jumping .frog-jump-1 {
@@ -36,17 +55,20 @@
         }
 
         .coordinates {
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.65);
             color: #fff;
             position: absolute;
             bottom: 40px;
             left: 10px;
-            padding: 5px 10px;
+            padding: 6px 12px;
             margin: 0;
-            font-size: 11px;
+            font-family: monospace;
+            font-size: 12px;
             line-height: 18px;
-            border-radius: 3px;
+            border-radius: 4px;
             display: none;
+            z-index: 10;
+            backdrop-filter: blur(4px);
         }
     </style>
 </head>
@@ -54,7 +76,79 @@
 <body>
     <div id="map"></div>
     <pre id="coordinates" class="coordinates"></pre>
-    <script src="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js"></script>
+
+    <template id="frog-template">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 297">
+            <g id="frogs">
+                <g class="frog" id="frog-front" transform="translate(105.28 -73.97)">
+                    <path d="M48.48 130.2a31.75 31.75 0 0 0-63.5 0 31.75 47.63 0 0 0 63.5 0z" id="path2"
+                        style="fill:#2d5a27;fill-opacity:1;stroke:#000000;stroke-width:1.05833;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none"></path>
+                    <path d="M3.38 166.7a13.4 13.4 0 0 0-23.2-13.4 13.4 20.1 30 0 0 23.2 13.4Z"
+                        id="path2-90"
+                        style="fill:#266323;fill-opacity:1;stroke:#000000;stroke-width:1.05833;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none"></path>
+                    <path d="M48.28 154.24a13.4 13.4 0 0 0-23.2 13.4 20.1 13.4 60 0 0 23.2-13.4Z"
+                        id="path2-90-7"
+                        style="fill:#266323;fill-opacity:1;stroke:#000000;stroke-width:1.05833;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none"></path>
+                    <g id="g4" style="stroke-width:1.05833;stroke-dasharray:none">
+                        <path d="M39.74 96.7a7.94 7.94 0 0 0-15.88 0 7.94 11.9 0 0 0 15.88 0z"
+                            id="path2-9-9"
+                            style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.05833;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></path>
+                        <path d="M33.84 97.74a3.35 3.35 0 0 0-6.7 0 3.35 5.02 0 0 0 6.7 0z" id="path2-9-9-0"
+                            style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.05833;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none"></path>
+                    </g>
+                    <g id="g4-1" transform="matrix(-1 0 0 1 34.85 -1.31)"
+                        style="stroke-width:1.05833;stroke-dasharray:none">
+                        <path d="M39.74 96.7a7.94 7.94 0 0 0-15.88 0 7.94 11.9 0 0 0 15.88 0z"
+                            id="path2-9-9-3"
+                            style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.05833;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></path>
+                        <path d="M33.84 97.74a3.35 3.35 0 0 0-6.7 0 3.35 5.02 0 0 0 6.7 0z"
+                            id="path2-9-9-0-8"
+                            style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.05833;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none"></path>
+                    </g>
+                </g>
+                <g class="frog frog-jump-1" id="frog-side-1" transform="translate(-33.73 -65.43)"
+                    style="visibility: hidden">
+                    <g id="g1">
+                        <path d="M180.06 146.76a31.75 31.75 0 0 0-44.9-44.9 31.75 47.63 45 0 0 44.9 44.9z"
+                            id="path2-4"
+                            style="fill:#2d5a27;fill-opacity:1;stroke:#000000;stroke-width:1.05833;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none"></path>
+                        <path d="M163.1 144.5a13.4 13.4 0 0 0-18.95 18.95 20.1 13.4 45 0 0 18.95-18.95z"
+                            id="path2-90-2"
+                            style="fill:#266323;fill-opacity:1;stroke:#000000;stroke-width:1.05833;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none"></path>
+                        <g id="g4-1-9" transform="matrix(-1 0 0 1 205.46 -1.93)"
+                            style="stroke-width:1.05833;stroke-dasharray:none">
+                            <path d="M39.74 96.7a7.94 7.94 0 0 0-15.88 0 7.94 11.9 0 0 0 15.88 0z"
+                                id="path2-9-9-3-5"
+                                style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.05833;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></path>
+                            <path d="M33.84 97.74a3.35 3.35 0 0 0-6.7 0 3.35 5.02 0 0 0 6.7 0z"
+                                id="path2-9-9-0-8-4"
+                                style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.05833;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none"></path>
+                        </g>
+                    </g>
+                </g>
+                <g class="frog frog-jump-2" id="frog-side-2" transform="translate(-123.24 -65.12)"
+                    style="visibility: hidden">
+                    <path d="M273.2 121.6a31.75 31.75 0 0 0-57.54-26.83 31.75 47.63 25 0 0 57.55 26.83Z"
+                        id="path2-4-8"
+                        style="fill:#2d5a27;fill-opacity:1;stroke:#000000;stroke-width:1.05833;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none"></path>
+                    <path d="M238.13 147.55a13.4 13.4 0 0 0-25.88 6.94 20.1 13.4 75 0 0 25.88-6.94z"
+                        id="path2-90-2-7"
+                        style="fill:#266323;fill-opacity:1;stroke:#000000;stroke-width:1.05833;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none"></path>
+                    <g id="g4-1-9-8" transform="matrix(-1 0 0 1 292.77 -22.13)"
+                        style="stroke-width:1.05833;stroke-dasharray:none">
+                        <path d="M39.74 96.7a7.94 7.94 0 0 0-15.88 0 7.94 11.9 0 0 0 15.88 0z"
+                            id="path2-9-9-3-5-7"
+                            style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.05833;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"></path>
+                        <path d="M33.84 97.74a3.35 3.35 0 0 0-6.7 0 3.35 5.02 0 0 0 6.7 0z"
+                            id="path2-9-9-0-8-4-7"
+                            style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.05833;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none"></path>
+                    </g>
+                </g>
+            </g>
+        </svg>
+    </template>
+
+    <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
     <script>
         const coordinates = document.getElementById('coordinates');
 
@@ -70,56 +164,49 @@
                 this.isJumping = false;
                 this.currentDirection = 'front';
                 this.radius = 0.75; // Radius in kilometers
-                let initialCircle = createCircularHole(startingPosition, this.radius);
-                let uncoveredAreaTmp = turf.featureCollection([]);
-                uncoveredAreaTmp.features.push(initialCircle);
-                this.uncoveredArea = uncoveredAreaTmp;
+                this.uncoveredArea = null;
+
                 this.createMarker();
-                this.updateFogLayer();
+                this.uncoverAt(startingPosition);
 
                 // Add zoom listener to update frog size
                 this.map.on('zoom', this.updateMarkerSize.bind(this));
                 this.updateMarkerSize(); // Call it initially
             }
 
-            updateFogLayer = function () {
-                const uncoveredHole = turf.convex(this.uncoveredArea);
-
-                const source = this.map.getSource('fog-layer');
-                if (source && uncoveredHole) {
-                    source.setData({
-                        type: 'FeatureCollection',
-                        features: [
-                            {
-                                type: 'Feature',
-                                geometry: {
-                                    type: 'Polygon',
-                                    coordinates: [
-                                        [
-                                            [-180, 90],
-                                            [180, 90],
-                                            [180, -90],
-                                            [-180, -90],
-                                            [-180, 90]
-                                        ],
-                                        uncoveredHole ? uncoveredHole.geometry.coordinates[0] : []
-                                    ]
-                                }
-                            }
-                        ]
-                    });
+            uncoverAt(coords) {
+                const circle = createCircularHole(coords, this.radius);
+                if (!this.uncoveredArea) {
+                    this.uncoveredArea = circle;
+                } else {
+                    this.uncoveredArea = turf.union(turf.featureCollection([this.uncoveredArea, circle]));
                 }
-            };
+                this.updateFogLayer();
+            }
+
+            updateFogLayer() {
+                const source = this.map.getSource('fog-layer');
+                if (source && this.uncoveredArea) {
+                    const fogGeoJson = turf.mask(this.uncoveredArea);
+                    source.setData(fogGeoJson);
+                }
+            }
 
             createMarker() {
                 this.element = document.createElement('div');
                 this.element.className = 'frog-marker';
 
-                fetch('froggy3.svg')
-                    .then(response => response.text())
-                    .then(svgContent => {
-                        this.element.innerHTML = svgContent;
-                    });
+                const template = document.getElementById('frog-template');
+                if (template) {
+                    this.element.appendChild(template.content.cloneNode(true));
+                } else {
+                    fetch('froggy3.svg')
+                        .then(response => response.text())
+                        .then(svgContent => {
+                            this.element.innerHTML = svgContent;
+                        })
+                        .catch(() => {});
+                }
 
                 this.updateMarkerSize(); // Initialize size
 
@@ -131,53 +218,55 @@
                     .addTo(this.map);
 
                 this.marker.parentObject = this;
-                this.marker.on("dragstart", function (e) {
-                    this.startPos = this.getLngLat();
+                this.marker.on("dragstart", () => {
+                    this.startPos = this.marker.getLngLat();
                 });
-                this.marker.on("drag", function (e) {
-                    const endPos = this.getLngLat();
+                this.marker.on("drag", () => {
+                    const endPos = this.marker.getLngLat();
                     const direction = endPos.lng > this.startPos.lng ? 1 : -1;
 
-                    document.querySelector('#frog-front').style.visibility = 'hidden';
-                    document.querySelector('#frog-side-1').style.visibility = 'visible';
-                    document.querySelector('#frog-side-2').style.visibility = 'visible';
+                    const frogFront = this.element.querySelector('#frog-front');
+                    const frogSide1 = this.element.querySelector('#frog-side-1');
+                    const frogSide2 = this.element.querySelector('#frog-side-2');
+                    if (frogFront) frogFront.style.visibility = 'hidden';
+                    if (frogSide1) frogSide1.style.visibility = 'visible';
+                    if (frogSide2) frogSide2.style.visibility = 'visible';
 
-                    this.getElement().classList.add('jumping');
+                    this.element.classList.add('jumping');
 
-                    const frogs = document.querySelector('#frogs');
-                    if (direction === 1) {
-                        frogs.removeAttribute("transform");
-                    } else {
-                        frogs.setAttribute("transform", "scale(-1, 1) translate(-210, 0)");
+                    const frogs = this.element.querySelector('#frogs');
+                    if (frogs) {
+                        if (direction === 1) {
+                            frogs.removeAttribute("transform");
+                        } else {
+                            frogs.setAttribute("transform", "scale(-1, 1) translate(-210, 0)");
+                        }
                     }
                 });
-                this.marker.on("dragend", function (e) {
-                    const lngLat = this.getLngLat();
-                    let frogCoords = lngLat.toArray();
+                this.marker.on("dragend", () => {
+                    const lngLat = this.marker.getLngLat();
+                    const frogCoords = lngLat.toArray();
 
-                    this.getElement().classList.remove('jumping');
-                    const frogs = document.querySelector('#frogs');
-                    frogs.removeAttribute("transform");
-                    document.querySelector('#frog-front').style.visibility = 'visible';
-                    document.querySelector('#frog-side-1').style.visibility = 'hidden';
-                    document.querySelector('#frog-side-2').style.visibility = 'hidden';
+                    this.element.classList.remove('jumping');
+                    const frogs = this.element.querySelector('#frogs');
+                    if (frogs) frogs.removeAttribute("transform");
+                    const frogFront = this.element.querySelector('#frog-front');
+                    const frogSide1 = this.element.querySelector('#frog-side-1');
+                    const frogSide2 = this.element.querySelector('#frog-side-2');
+                    if (frogFront) frogFront.style.visibility = 'visible';
+                    if (frogSide1) frogSide1.style.visibility = 'hidden';
+                    if (frogSide2) frogSide2.style.visibility = 'hidden';
 
-                    const circle = createCircularHole(frogCoords, this.parentObject.radius);
-                    this.parentObject.uncoveredArea.features.push(circle);
-
-                    this.parentObject.updateFogLayer();
+                    this.uncoverAt(frogCoords);
 
                     coordinates.style.display = 'block';
-                    coordinates.innerHTML = `Longitude: ${lngLat.lng}<br />Latitude: ${lngLat.lat}`;
+                    coordinates.innerHTML = `Longitude: ${lngLat.lng.toFixed(4)}<br />Latitude: ${lngLat.lat.toFixed(4)}`;
                 });
             }
 
             updateMarkerSize() {
-                //console.log('updateMarkerSize');
                 const zoom = this.map.getZoom();
-                //console.log('zoom', zoom);
                 const size = this.getSizeForZoom(zoom);
-                //console.log('size', size);
                 this.element.style.width = `${size}px`;
                 this.element.style.height = `${size}px`;
             }
@@ -202,23 +291,7 @@
                 type: 'geojson',
                 data: {
                     type: 'FeatureCollection',
-                    features: [
-                        {
-                            type: 'Feature',
-                            geometry: {
-                                type: 'Polygon',
-                                coordinates: [
-                                    [
-                                        [-180, 90],
-                                        [180, 90],
-                                        [180, -90],
-                                        [-180, -90],
-                                        [-180, 90]
-                                    ]
-                                ]
-                            }
-                        }
-                    ]
+                    features: []
                 }
             });
 
